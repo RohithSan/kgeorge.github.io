@@ -14,10 +14,10 @@ author :
   name : Koshy George
   email : kgeorge2@gmail.com
   github : kgeorge
-  twitter : kgeorge
-  feedburner : feedname
+#  twitter : kgeorge
+#  feedburner : feedname
 
-
+markdown: redcarpet
 excerpt_separator : "\n\n\n"
 # The production_url is only used when full-domain names are needed
 # such as sitemap.txt 
