@@ -84,9 +84,9 @@ JB :
   comments :
     provider : disqus
     disqus :
-      short_name : jekyllbootstrap
+      short_name : kgeorge
     livefyre :
-      site_id : 123
+     site_id : 123
     intensedebate :
       account : 123abc
     facebook :
