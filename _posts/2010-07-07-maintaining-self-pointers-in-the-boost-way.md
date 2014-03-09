@@ -15,7 +15,7 @@ The master smiled and the following explanation happened.</b>
 
 
 
-### Experiment1, dumb design and leaky code
+### Experiment-1, dumb design and leaky code
 Consider two classes  <code>Engine</code> and <code>Renderer</code>.
 Design-wise they can be related by composition.
 <code>Engine</code> should have a <code>Renderer</code>.

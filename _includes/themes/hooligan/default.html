@@ -15,6 +15,14 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <!-- Mathjax -->
+    <script type="text/javascript"
+    src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    <!-- Equation numbering -->
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({TeX: { equationNumbers: { autoNumber: "AMS" } }
+    });
 
     <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ ASSET_PATH }}/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
