@@ -3,7 +3,7 @@ layout: post
 title: "Retrieving transformation info from instances"
 description: ""
 category: 
-tags: []
+tags: [numerical analysis, matrix calculus, least squares, transformation matrix, instance]
 ---
 {% include JB/setup %}
 

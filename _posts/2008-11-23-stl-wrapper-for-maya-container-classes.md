@@ -3,7 +3,7 @@ layout: post
 title: "stl wrapper for maya container classes"
 description: ""
 category: 
-tags: []
+tags: [generic programming, c++, stl, maya SDK, maya, design patterns, object oriented programming]
 ---
 {% include JB/setup %}
 

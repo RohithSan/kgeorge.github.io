@@ -3,7 +3,7 @@ layout: post
 title: "Using boost::shared_ptr on class hierarchies"
 description: ""
 category: 
-tags: []
+tags: [generic programming, boost, shared_ptr, object oriented programming]
 ---
 {% include JB/setup %}
 

@@ -3,7 +3,7 @@ layout: post
 title: "old and miscellaneous software"
 description: ""
 category: 
-tags: []
+tags: [renderman, python, maya, MEL, mayaSDK, shader]
 ---
 {% include JB/setup %}
 

@@ -3,7 +3,7 @@ layout: post
 title: "deriving opengl perspective matrix from opencv intrinsic matrix"
 description: ""
 category: 
-tags: []
+tags: [augmented reality, opencv, opengl, intrinsic matrix, camera calibration]
 ---
 {% include/JB/setup %}
 

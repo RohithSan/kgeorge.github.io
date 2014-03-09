@@ -3,7 +3,7 @@ layout: post
 title: "small experiments with  r value references in c++11"
 description: ""
 category: 
-tags: []
+tags: [c++11, r-value references]
 ---
 {% include JB/setup %}
 

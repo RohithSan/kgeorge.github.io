@@ -3,7 +3,7 @@ layout: post
 title: "static poly morphism for multi platform api"
 description: ""
 category: 
-tags: []
+tags: [generic programming, c++, stl, game development, polymorphism, vtable, virtual function table]
 ---
 {% include JB/setup %}
 

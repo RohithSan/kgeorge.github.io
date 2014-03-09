@@ -3,7 +3,7 @@ layout: post
 title: "Generic observer pattern implementation"
 description: ""
 category: 
-tags: []
+tags: [generic programming, c++, stl, design patterns, observer]
 ---
 {% include JB/setup %}
 

@@ -3,7 +3,7 @@ layout: post
 title: "observation: maintaining self pointers in the boost way"
 description: ""
 category: 
-tags: []
+tags: [generic programming, boost, shared_ptr, object oriented programming]
 ---
 {% include JB/setup %}
 
