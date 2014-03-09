@@ -28,11 +28,12 @@ If the <code>Renderer</code> implements the back pointer via a <code>shared_poin
 then we have a dead lock of destroying both the <code>Engine</code> and the <code>Renderer</code>. <code>Engine</code> has a <code>shared_ptr</code> to the <code>Renderer</code>
 and <code>Renderer</code> has a <code>shared_ptr</code> to the <code>Engine</code>.
 
-```c++
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
+
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
 using namespace std;
 using namespace boost;
 namespace
@@ -52,14 +53,14 @@ namespace
 	        _RPT0(_CRT_WARN, "E:destructorn" );
 	    }
 	    void SetRenderer(
-                shared_ptr <R> & renderer
+                shared_ptr &lt;R&gt; &amp; renderer
             )
 	    {
 	        m_renderer = renderer;
 	    }
 	    protected:
 	    const std::string m_data;
-	    shared_ptr <R> m_renderer;
+	    shared_ptr &lt;R&gt; m_renderer;
 	};
 
 
@@ -67,7 +68,7 @@ namespace
         {
             public:
 	    R(
-	        const std::string &data
+	        const std::string &amp;data
 	    ):m_data( data)
 	    {
 	        _RPT0(_CRT_WARN, "R:constructorn" );
@@ -77,28 +78,28 @@ namespace
 	         _RPT0(_CRT_WARN, "R:destructorn" );
 	    }
 	    void RegisterEngine(
-                shared_ptr <E> & engine
+                shared_ptr &lt;E&gt; &amp; engine
             )
 	    {
 	        m_engine = engine;
 	    }
 	    protected:
 	    const std::string m_data;
-	    shared_ptr <E> m_engine;
+	    shared_ptr &lt;E&gt; m_engine;
     };
 }
-```
+</pre>
 
 If the above two classes are used in the following manner,
 <code>Engine</code> has a <code>shared_ptr</code> to the <code>Renderer</code> and <code>Renderer</code> has a <code>shared_ptr</code> to the <code>Engine</code>.
 Consequently the destructors of the  instances pointed to by <code>sR</code> and <code>sE</code> wont be called,
 which results in a memory leak.
 
-```c++
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
 /*
   namespace Experiment1
 {
@@ -116,23 +117,23 @@ bool test()
     );
     shared_ptr sE( new E("theEngine") );
     shared_ptr sR( new R("cartoonRenderer"));
-    sE->SetRenderer( sR );
-    sR->RegisterEngine( sE );
+    sE-&gt;SetRenderer( sR );
+    sR-&gt;RegisterEngine( sE );
     return true;
 }
-```
+</pre>
 
 
 ### Experiment2, leak proof code, but dumb design
 
 To fix the memory leaks, R should hold a weak pointer to E.
 
-```c++
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
+#include &lt;boost/weak_ptr.hpp&gt;
 using namespace std;
 using namespace boost;
 namespace
@@ -143,7 +144,7 @@ namespace
 	class E
 	{
 	    public:
-	    E( const std::string &data):m_data( data)
+	    E( const std::string &amp;data):m_data( data)
 	    {
 	        _RPT0(_CRT_WARN, "E:constructorn" );
 	    }
@@ -152,14 +153,14 @@ namespace
 	        _RPT0(_CRT_WARN, "E:destructorn" );
 	    }
 	    void SetRenderer(
-                shared_ptr <R> & renderer
+                shared_ptr &lt;R&gt; &amp; renderer
             )
 	    {
 	        m_renderer = renderer;
 	    }
 	    protected:
 	    const std::string m_data;
-	    shared_ptr <R> m_renderer;
+	    shared_ptr &lt;R&gt; m_renderer;
 	};
 
 
@@ -167,7 +168,7 @@ namespace
         {
             public:
 	    R(
-	        const std::string &data
+	        const std::string &amp;data
 	    ):m_data( data)
 	    {
 	        _RPT0(_CRT_WARN, "R:constructorn" );
@@ -177,27 +178,27 @@ namespace
 	         _RPT0(_CRT_WARN, "R:destructorn" );
 	    }
 	    void RegisterEngine(
-                shared_ptr <E> & engine
+                shared_ptr &lt;E&gt; &amp; engine
             )
 	    {
 	        m_engine = engine;
 	    }
 	    protected:
 	    const std::string m_data;
-	    weak_ptr <E> m_engine;
+	    weak_ptr &lt;E&gt; m_engine;
     };
 
 }
-```
+</pre>
 
 The following use of  the <code>Engine</code> and <code>Renderer</code> wont cause any memory-leaks.
 But it has a design problem as explained below.
 
-```c++
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
 /*
   namespace Experiment2
 {
@@ -214,11 +215,11 @@ bool test()
     );
     shared_ptr sE( new E("theEngine") );
     shared_ptr sR( new R("cartoonRenderer"));
-    sE->SetRenderer( sR );
-    sR->RegisterEngine( sE );
+    sE-&gt;SetRenderer( sR );
+    sR-&gt;RegisterEngine( sE );
     return true;
 }
-```
+</pre>
 
 
 ### Experiment3, smart design, but leaky code
@@ -247,12 +248,12 @@ created through  a <code>Create</code> function.
 This will again result in memory leak, since if you  blindly keep a self shared_ptr to the class itself,
 the class-s destructor will never be called. Consequently <code>Engine</code>'s destructor will never be called.
 
-```
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
+#include &lt;boost/weak_ptr.hpp&gt;
 using namespace std;
 using namespace boost;
 namespace
@@ -263,30 +264,30 @@ namespace
 	class E
 	{
 	    public:
-            shared_ptr &Create(
-                 const std::string &i_data
+            shared_ptr &amp;Create(
+                 const std::string &amp;i_data
             )
             {
                   E *pE = new E(i_data);
-                  return pE->m_self;
+                  return pE-&gt;m_self;
             }
 	    virtual ~E()
 	    {
 	        _RPT0(_CRT_WARN, "E:destructorn" );
 	    }
 	    void SetRenderer(
-                shared_ptr <R> & renderer
+                shared_ptr &lt;R&gt; &amp; renderer
             );
             protected:
-	    E( const std::string &data):m_data( data)
+	    E( const std::string &amp;data):m_data( data)
 	    {
                 m_self.reset( this );
 	        _RPT0(_CRT_WARN, "E:constructorn" );
 	    }
 	    protected:
 	    const std::string m_data;
-	    shared_ptr <R> m_renderer;
-            shared_ptr <E> m_self;
+	    shared_ptr &lt;R&gt; m_renderer;
+            shared_ptr &lt;E&gt; m_self;
 	};
 
 
@@ -294,7 +295,7 @@ namespace
         {
             public:
 	    R(
-	        const std::string &data
+	        const std::string &amp;data
 	    ):m_data( data)
 	    {
 	        _RPT0(_CRT_WARN, "R:constructorn" );
@@ -304,39 +305,39 @@ namespace
 	         _RPT0(_CRT_WARN, "R:destructorn" );
 	    }
 	    void RegisterEngine(
-                shared_ptr <E> & engine
+                shared_ptr &lt;E&gt; &amp; engine
             );
 	    protected:
 	    const std::string m_data;
-	    weak_ptr <E> m_engine;
+	    weak_ptr &lt;E&gt; m_engine;
     };
 
 
 
     void E::SetRenderer(
-        shared_ptr <R> & renderer
+        shared_ptr &lt;R&gt; &amp; renderer
      )
     {
         m_renderer = renderer;
-        m_renderer->RegisterEngine( m_self );
+        m_renderer-&gt;RegisterEngine( m_self );
     }
 
     void R::RegisterEngine(
-        shared_ptr <E> & engine
+        shared_ptr &lt;E&gt; &amp; engine
      )
     {
 	m_engine = engine;
     }
 }
-```
+</pre>
 
 The following use of te above design will still result in memory leak, since E is never deleted.
 
-```
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
 /*
   namespace Experiment3
 {
@@ -353,21 +354,21 @@ bool test()
     );
     shared_ptr sE( E::Create("theEngine") );
     shared_ptr sR( new R("cartoonRenderer"));
-    sE->SetRenderer( sR );
+    sE-&gt;SetRenderer( sR );
     return true;
 }
-```
+</pre>
 
 === Experiment4, smart design and leak proof code
 The correct way to do this is using a <code>boost::enable_shared_from_this</code> construct.
 
-```
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
-#include <boost/weak_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
+#include &lt;boost/weak_ptr.hpp&gt;
+#include &lt;boost/enable_shared_from_this.hpp&gt;
 using namespace std;
 using namespace boost;
 namespace
@@ -375,33 +376,33 @@ namespace
     namespace Experiment4
     {
         class R;
-	class E :public enable_shared_from_this<E>
+	class E :public enable_shared_from_this&lt;E&gt;
 	{
 	    public:
-            shared_ptr &Create(
-                 const std::string &i_data
+            shared_ptr &amp;Create(
+                 const std::string &amp;i_data
             )
             {
                   shared_ptr temp( new E(i_data) );
-                  return temp->shared_from_this();
+                  return temp-&gt;shared_from_this();
             }
 	    virtual ~E()
 	    {
 	        _RPT0(_CRT_WARN, "E:destructorn" );
 	    }
 	    void SetRenderer(
-                shared_ptr <R> & renderer
+                shared_ptr &lt;R&gt; &amp; renderer
             );
             protected:
-	    E( const std::string &data):m_data( data)
+	    E( const std::string &amp;data):m_data( data)
 	    {
 	        _RPT0(_CRT_WARN, "E:constructorn" );
 	    }
 	    protected:
 	    const std::string m_data;
-	    shared_ptr <R> m_renderer;
+	    shared_ptr &lt;R&gt; m_renderer;
             //no need of maintaining a self shared_ptr
-            //shared_ptr <E> m_self;
+            //shared_ptr &lt;E&gt; m_self;
 	};
 
 
@@ -409,7 +410,7 @@ namespace
         {
             public:
 	    R(
-	        const std::string &data
+	        const std::string &amp;data
 	    ):m_data( data)
 	    {
 	        _RPT0(_CRT_WARN, "R:constructorn" );
@@ -419,39 +420,39 @@ namespace
 	         _RPT0(_CRT_WARN, "R:destructorn" );
 	    }
 	    void RegisterEngine(
-                shared_ptr <E> & engine
+                shared_ptr &lt;E&gt; &amp; engine
             );
 	    protected:
 	    const std::string m_data;
-	    weak_ptr <E> m_engine;
+	    weak_ptr &lt;E&gt; m_engine;
     };
 
 
 
     void E::SetRenderer(
-        shared_ptr <R> & renderer
+        shared_ptr &lt;R&gt; &amp; renderer
      )
     {
         m_renderer = renderer;
-        m_renderer->RegisterEngine( m_self );
+        m_renderer-&gt;RegisterEngine( m_self );
     }
 
     void R::RegisterEngine(
-        shared_ptr <E> & engine
+        shared_ptr &lt;E&gt; &amp; engine
      )
     {
 	m_engine = engine;
     }
 }
-```
+</pre>
 
 This is used as below.
 
-```
-#include <cstdlib>
-#include <crtdbg.h>
-#include <string>
-#include <boost/shared_ptr.hpp>
+<pre>
+#include &lt;cstdlib&gt;
+#include &lt;crtdbg.h&gt;
+#include &lt;string&gt;
+#include &lt;boost/shared_ptr.hpp&gt;
 /*
   namespace Experiment4
 {
@@ -467,7 +468,7 @@ bool test()
     );
     shared_ptr sE( E::Create("theEngine") );
     shared_ptr sR( new R("cartoonRenderer"));
-    sE->SetRenderer( sR );
+    sE-&gt;SetRenderer( sR );
     return true;
 }
-```
+</pre>

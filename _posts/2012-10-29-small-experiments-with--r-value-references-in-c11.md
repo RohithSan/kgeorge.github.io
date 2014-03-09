@@ -17,33 +17,35 @@ can avoid unnecessary calls to the copy constructor. I used mingw and gcc 4.7.
 Let us consider a <code>class A</code>, which holds an expensive resource. For the sake of simplicity,
 let us assume that the member <code>string A::sA</code> is in fact an expensive resource.
 
-```c++
+
+<pre>
 class A {
   public:
   A(const string &sA):sA(sA){
     const char *pz = sA.c_str();
-    cout << "expensive constructor: " << pz;
-    cout <<  endl;
+    cout &lt;&lt; "expensive constructor: " &lt;&lt; pz;
+    cout &lt;&lt;  endl;
   }
 
   A(const A &a):sA(a.sA){
     const char *pz = a.sA.c_str();
-    cout << "expensive copy constructor:" << pz;
-    cout << endl;
+    cout &lt;&lt; "expensive copy constructor:" &lt;&lt; pz;
+    cout &lt;&lt; endl;
   }
 
   A & operator=(const A &other){
     sA = other.sA; 
     const char*pz = sA.c_str();
-    cout << "assignment operator:" << pz;
-    cout << endl;
+    cout &lt;&lt; "assignment operator:" &lt;&lt; pz;
+    cout &lt;&lt; endl;
     return *this;
   }
 
   ~A(){}
   string sA; //stand in for the expensive resource
 };
-```
+</pre>
+
 Let us assume that it  is expensive to construct <code>A</code>. 
 Also assume that calling copy constructor of <code>A</code> is also prohibitively expensive,
 since this requires cloning the resource from the source argument.
@@ -54,29 +56,29 @@ The following code fills the target vector with 5 <code>A</code> objects.
 
 ### Trial -1
 
-```c++
-void bunchOfAs(vector<A> &tgt) {
-  insert_iterator<vector<A> > ait(tgt, tgt.end());
-  cout << "start filling vector" << endl;
-  for(int i=0; i < 5; ++i) {
+<pre>
+void bunchOfAs(vector&lt;A&gt; &tgt) {
+  insert_iterator&lt;vector&lt;A&gt; &gt; ait(tgt, tgt.end());
+  cout &lt;&lt; "start filling vector" &lt;&lt; endl;
+  for(int i=0; i &lt; 5; ++i) {
      stringstream ss;
-     ss << i;
+     ss &lt;&lt; i;
     *ait++ = A(ss.str());
   }
-  cout << "end filling vector" << endl;
+  cout &lt;&lt; "end filling vector" &lt;&lt; endl;
 }
-```
+</pre>
 
 This was called as,
 
-```c++
-vector<A> myCollection;
+<pre>
+vector&lt;A&gt; myCollection;
 bunchOfAs(myCollection);
-```
+</pre>
 
 This resulted in the following output.
 
-```c++
+<pre>
 start filling vector
 expensive constructor: 0
 expensive copy constructor:0
@@ -96,7 +98,7 @@ expensive copy constructor:1
 expensive copy constructor:2
 expensive copy constructor:3
 end filling vector
-```
+</pre>
 
 The expensive constructors associated with the creation of the 5 <code>A</code>-s cannot be avoided.
 No worries there. But I was amazed to find such an innocent code resulting in this many number of copy constructors.
@@ -111,15 +113,15 @@ This re-allocation and copying repeats for a few times.
 ### Trial 2
 So this time I reserved enough storage for myCollection to begin with, as in,
 
-```c++
-vector<A> myCollection;
+<pre>
+vector&lt;A&gt; myCollection;
 myCollection.reserve(5);
 bunchOfAs(myCollection);
-```
+</pre>
 
 which resulted in the following output.
 
-```
+<pre>
 start filling vector
 expensive constructor: 0
 expensive copy constructor:0
@@ -132,25 +134,25 @@ expensive copy constructor:3
 expensive constructor: 4
 expensive copy constructor:4
 end filling vector
-```
+</pre>
 
 This is much better. Still, for each <code>A</code> which is constructed,
 we call another copy constructor also.
 How can we eliminate this unnecessary call to the copy constructor?
 If we go back, our original code to make a bunch of <code>A</code>-s was
 
-```c++
-void bunchOfAs(vector<A> &amp;tgt) {
-  insert_iterator<vector<a> > ait(tgt, tgt.end());
-  cout << "start filling vector" << endl;
-  for(int i=0; i < 5; ++i) {
+<pre>
+void bunchOfAs(vector&lt;A&gt; &amp;tgt) {
+  insert_iterator&lt;vector&lt;a&gt; &gt; ait(tgt, tgt.end());
+  cout &lt;&lt; "start filling vector" &lt;&lt; endl;
+  for(int i=0; i &lt; 5; ++i) {
     stringsteam ss;
-    ss << i;
+    ss &lt;&lt; i;
     *ait++ = A(ss.str());
   }
-  cout << "end filling vector" << endl;
+  cout &lt;&lt; "end filling vector" &lt;&lt; endl;
 }
-```
+</pre>
 
 
 Let us take a look at the line <code> *ait++ = A(ss.str()); </code>.
@@ -163,51 +165,51 @@ and it is then copied to the next location pointed by the insert iterator.
 To eliminate the unnecessary call to the copy constructor,
 I amended the definition of <code>class A</code> with a move constructor also, as in.
 
-```c++
+<pre>
 class A {
   public:
   A(const string &amp;sA):sA(sA){
     const char *pz = sA.c_str();
-    cout << "expensive constructor: " << pz;
-    cout <<  endl;
+    cout &lt;&lt; "expensive constructor: " &lt;&lt; pz;
+    cout &lt;&lt;  endl;
   }
 
   A(A&amp;&amp; a):sA(std::move(a.sA)){
     const char *pz = sA.c_str();
-    cout << "cheap move constructor:" << pz;
-    cout << endl;
+    cout &lt;&lt; "cheap move constructor:" &lt;&lt; pz;
+    cout &lt;&lt; endl;
   }
 
   A(const A &amp;a):sA(a.sA){
     const char *pz = a.sA.c_str();
-    cout << "expensive copy constructor:" << pz;
-    cout << endl;
+    cout &lt;&lt; "expensive copy constructor:" &lt;&lt; pz;
+    cout &lt;&lt; endl;
   }
 
   A &amp; operator=(const A &amp;other){
     sA = other.sA;
     const char*pz = sA.c_str();
-    cout << "assignment operator:" << pz;
-    cout << endl;
+    cout &lt;&lt; "assignment operator:" &lt;&lt; pz;
+    cout &lt;&lt; endl;
     return *this;
   }
 
   ~A(){}
   string sA; //stand in for expensive resource
 }
-```
+</pre>
 
 I called this as follows,
 
-```c++
-vector<A> myCollection;
+<pre>
+vector&lt;A&gt; myCollection;
 myCollection.reserve(5);
 bunchOfAs(myCollection);
-```
+</pre>
 
 which resulted in the following output.
 
-```
+<pre>
 start filling vector
 expensive constructor: 0
 cheap move constructor:0
@@ -220,30 +222,30 @@ cheap move constructor:3
 expensive constructor: 4
 cheap move constructor:4
 end filling vector
-```
+</pre>
 
 ### Trial-4
 Since modern compilers (I used g++4.7) are good at return value optimization,
 I could simplify this code as follows without any additional calls to the copy constructor.
 
-```c++
-vector<A> bunchOfAs() {
-  vector<A> tgt;
+<pre>
+vector&lt;A&gt; bunchOfAs() {
+  vector&lt;A&gt; tgt;
   tgt.reserve(5);
-  insert_iterator<vector<A> > ait(tgt, tgt.end());
-  cout << "start filling vector" << endl;
-  for(int i=0; i < 5; ++i) {
+  insert_iterator&lt;vector&lt;A&gt; &gt; ait(tgt, tgt.end());
+  cout &lt;&lt; "start filling vector" &lt;&lt; endl;
+  for(int i=0; i &lt; 5; ++i) {
     stringstream ss;
-    ss << i;
+    ss &lt;&lt; i;
     *ait++ = A(ss.str());
   }
-  cout << "end filling vector" << endl;
+  cout &lt;&lt; "end filling vector" &lt;&lt; endl;
   return tgt;
 }
-```
+</pre>
 
 I invoke this as
 
-```
-vector<A> myCollection = bunchOfAs();
-```
+<pre>
+vector&lt;A&gt; myCollection = bunchOfAs();
+</pre>
