@@ -9,7 +9,7 @@ pygments: true
 # so be sure to set them if your theme uses them.
 #
 title : Koshy George
-tagline: just another blog
+tagline: computer vision, computer graphics, software architecture
 author :
   name : Koshy George
   email : kgeorge2@gmail.com
