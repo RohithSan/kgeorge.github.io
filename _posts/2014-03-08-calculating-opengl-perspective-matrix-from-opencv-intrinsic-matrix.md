@@ -1,17 +1,17 @@
 ---
 layout: post
-title: "calculating opengl perspective matrix from opencv intrinsic matrix"
+title: "calculating OpenGL perspective matrix from OpenCV intrinsic matrix"
 description: ""
 category: 
 tags: [augmented reality, opencv, opengl, intrinsic matrix, camera calibration]
 ---
 {% include/JB/setup %}
 
-When we develop augmented reality applications, we have to display OpenGL graphics superimposed on the realtime video feed that you get from a camera.
+How can we calculate the OpenGL persective matrix, from the camera calibration matrix (intrinsic matrix) and other parameters?
+![result]({{ site.url }}/assets/content/kgeorge_ar_result.jpg)
 
 
-
-To do this we must do two steps:
+When we develop augmented reality applications, we have to display OpenGL graphics superimposed on the realtime video feed that you get from a camera. To do this we must do two steps:
 
 * We must first calibrate our camera as an offline process to determine the intrinsic parameters of the camera as described by [Hartley and Zisserman](http://users.rsise.anu.edu.au/hartley/public_html/Papers/CVPR99-tutorial/tutorial.pdf)
 * The augmented reality application, on every frame of the realtime video feedback, now uses the intrinsic matrix, and correspondence between the image and object-centric points of a fiducial marker and give you the rotation and translation (model-view matrix) of the OpenGL frame.
@@ -20,7 +20,7 @@ For drawing an open OpenGL object, we need the current model-view matrix and the
 
 
 
-Please checkout my implementation as demonstrated in this [video](http://www.youtube.com/watch?v=lvz1k0VNF2g). ![result]({{ site.url }}/assets/content/kgeorge_ar_result.jpg)
+Please checkout my implementation as demonstrated in this [video](http://www.youtube.com/watch?v=lvz1k0VNF2g).
 Before we must give any explanation, we must acknowledge the following excellent blog post by <a title="Kyle Simek's explanation" href="//ksimek.github.io/2013/06/03/calibrated_cameras_in_OpenGL/">Kyle Simek </a> on this subject. What follows is my personal way to explain off the complexity, deriving largely from Kyle's work.
 
 ### Problem specification
@@ -145,13 +145,13 @@ Let us  put this pinhole camera in the OpenGL coordinate system, which will help
 
 ![pinhole camera in ogl]({{ site.url }}/assets/content/pinhole_ogl.jpg)
 
-This is different from fig 1 in that, the camera is looking down the negative Z-axis just as in OpenGL.
-The effective intrisic matrix in OpenGL co-ordinate system is
+This is different from fig 1 in that, the camera is looking down the negative Z-axis just as in OpenGL. Also, the image plane origin should correspond to the
+(minimum, minimum) point of the focal plane origin. With these considerations, the intrisic matrix in OpenGL co-ordinate system is
 
 $$
 \begin{equation}
     \begin{bmatrix} x \\ y \\ 1 \\ 1 \\ \end{bmatrix} \approx   \begin{bmatrix}
-        -p.k_x & 0  & -c_x & 0 \\
+        p.k_x & 0  & -c_x & 0 \\
         0   & p.k_y & -c_y & 0 \\
         0   & 0 & -1 & 0 \\
         0 & 0 & -1 & 0 \\
