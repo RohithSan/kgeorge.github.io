@@ -8,6 +8,7 @@ tags: [augmented reality, opencv, opengl, intrinsic matrix, camera calibration]
 {% include/JB/setup %}
 
 How can we calculate the OpenGL persective matrix, from the camera calibration matrix (intrinsic matrix) and other parameters?
+
 ![result]({{ site.url }}/assets/content/kgeorge_ar_result.jpg)
 
 
@@ -21,7 +22,11 @@ For drawing an open OpenGL object, we need the current model-view matrix and the
 
 
 Please checkout my implementation as demonstrated in this [video](http://www.youtube.com/watch?v=lvz1k0VNF2g).
-Before we must give any explanation, we must acknowledge the following excellent blog post by <a title="Kyle Simek's explanation" href="//ksimek.github.io/2013/06/03/calibrated_cameras_in_OpenGL/">Kyle Simek </a> on this subject. What follows is my personal way to explain off the complexity, deriving largely from Kyle's work.
+
+*Before we must give any explanation, we must acknowledge the following excellent blog post by <a title="Kyle Simek's explanation" href="//ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl/">Kyle Simek </a> which is a more general solution on this subject.
+What follows is my personal way to explain off the complexity, deriving largely from Kyle's work, assuming the specialization that the OpenGL view frsutum constructed is symmetrical wrt the co-ordinate axes.*
+
+
 
 ### Problem specification
 
@@ -49,7 +54,7 @@ $$M_{proj}$$.
 
 ##### Haretley-Zisserman pinhole camera
 
-We have the opencv intrinsic matrix to start with. It is expressed as,
+We have the OpenCV intrinsic matrix to start with. It is expressed as,
 $$
     I = \begin{bmatrix}
         \alpha & \mu  & c_x \\
@@ -173,7 +178,7 @@ to transform a 3d point to the normalized device coordinate space below.
 
 ![focal to image plane]({{ site.url }}/assets/content/ogl_post_xform.jpg)
 
-For mathematical sanity, please be assured that  $$l',r',b'$$ and $$t'$$ can be computed from $$l,r,b,,t,n$$ and $$f$$ by means of simimlarity transforms.
+For mathematical sanity, please be assured that  $$l',r',b'$$ and $$t'$$ can be computed from $$l,r,b,,t,n$$ and $$f$$ by means of similarity transforms.
 
 We can write the above OpenGL perspective process as
 
@@ -275,5 +280,5 @@ Please checkout the following [video](http://www.youtube.com/watch?v=lvz1k0VNF2g
 
 ## References
 
-*  [Kyle Simek's excellent post on OpenGL-opencv camera calibration](https://ksimek.github.io/2013/06/03/calibrated_cameras_in_OpenGL)
+*  [Kyle Simek's excellent post on OpenGL-opencv camera calibration](http://ksimek.github.io/2013/06/03/calibrated_cameras_in_opengl)
 *  [Song Ho Ahn's excellent derivation of OpenGL perspective matrix](http://www.songho.ca/opengl/gl_projectionmatrix.html)
