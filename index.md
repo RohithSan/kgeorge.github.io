@@ -1,7 +1,7 @@
 ---
 layout: page
 title: kgeorge's programming blog
-tagline: Computer Vision, Computer Graphics, Generic Programming
+tagline: Computer Vision, Computer Graphics
 ---
 {% include JB/setup %}
 
