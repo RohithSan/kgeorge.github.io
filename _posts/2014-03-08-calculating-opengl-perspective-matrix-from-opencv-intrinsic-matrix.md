@@ -7,7 +7,7 @@ tags: [augmented reality, opencv, opengl, intrinsic matrix, camera calibration]
 ---
 {% include/JB/setup %}
 
-How can we calculate the OpenGL persective matrix, from the camera calibration matrix (intrinsic matrix) and other parameters?
+How can we calculate the OpenGL perpsective matrix, from the camera calibration matrix (intrinsic matrix) and other parameters?
 
 ![result]({{ site.url }}/assets/content/kgeorge_ar_result.jpg)
 
@@ -151,7 +151,7 @@ Let us  put this pinhole camera in the OpenGL coordinate system, which will help
 ![pinhole camera in ogl]({{ site.url }}/assets/content/pinhole_ogl.jpg)
 
 This is different from fig 1 in that, the camera is looking down the negative Z-axis just as in OpenGL. Also, the image plane origin should correspond to the
-(minimum, minimum) point of the focal plane origin. With these considerations, the intrisic matrix in OpenGL co-ordinate system is
+(minimum, minimum) point of the focal plane origin. With these considerations, the effective intrisic matrix in OpenGL co-ordinate system is
 
 $$
 \begin{equation}
