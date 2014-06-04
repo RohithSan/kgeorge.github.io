@@ -313,11 +313,22 @@ For each of the input sample sliding window X, which is a 1 x 3780 matrix, the f
 
 <pre>
 import sklearn.svm as skl
-prob = clf.predict_proba(npFloatVec)[0][1]
-if (prob > 0.85):
-    print "car"
-else:
-    print "clutter"
+
+def predict(sliding_window_image):
+    gammaCorrect(sliding_window_image)
+    normalizedImage = normalize(sliding_window_image)
+    convertedImage = cv2.cvtColor( normalizedImage, cv2.COLOR_BGR2GRAY)
+    //compute hog parametsrs
+    hog_descriptors = np.zeros((1, 3780))
+
+    //fill in the routne for computing 3780 hog descriptors
+    //compute_hog(convertedImage, hog_descriptors)
+    
+    prob = clf.predict_proba(hog_descriptors)
+    if (prob > 0.85):
+        print "car"
+    else:
+        print "clutter"
 </pre>
 
 ### non-maxima suppression
