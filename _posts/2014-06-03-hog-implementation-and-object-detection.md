@@ -319,21 +319,21 @@ def predict(sliding_window_image):
     normalizedImage = normalize(sliding_window_image)
     convertedImage = cv2.cvtColor( normalizedImage, cv2.COLOR_BGR2GRAY)
     //compute hog parametsrs
-    hog_descriptors = np.zeros((1, 3780))
+    hog_descriptors = np.zeros((3780))
 
     //fill in the routne for computing 3780 hog descriptors
     //compute_hog(convertedImage, hog_descriptors)
-    
+
     prob = clf.predict_proba(hog_descriptors)
     if (prob > 0.85):
-        print "car"
+        print "yes car"
     else:
-        print "clutter"
+        print "no car"
 </pre>
 
 ### non-maxima suppression
 
-All the "yes" sample sliding windows for a frame would be sorted in descending order of the result probability and all the neighboring yes samples of a maxima would be
+All the "yes car" sample sliding windows for a frame would be sorted in descending order of the result probability and all the neighboring yes samples of a maxima would be
 suppressed. A neighborhood window of 20 pixels x 20 pixels is used.
 
 ### Speed
