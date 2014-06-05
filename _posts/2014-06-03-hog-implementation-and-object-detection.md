@@ -145,18 +145,6 @@ BOOST_PYTHON_MODULE(hogModule) {
 }
 </pre>
 
-* histogram normalization
-
-The gamma corrected sliding-window would be then subjected to histogram-equalization as in.
-<pre>
-def normalizeImage(img):
-    convertedImg = cv2.cvtColor(img, cv2.COLOR_BGR2YCR_CB)
-    channels = cv2.split(convertedImg)
-    channels[0] = cv2.equalizeHist(channels[0])
-    convertedImg = cv2.merge(channels)
-    convertedImg = cv2.cvtColor(convertedImg, cv2.COLOR_YCR_CB2BGR)
-    return convertedImg
-</pre>
 
 
 ### HOG descriptor calculation
@@ -247,7 +235,8 @@ void computeCellGradients(
 </pre>
 
 
-Please note that in each cell, we are weighting the magnitude by a 2d gaussian (the code is not provided here).
+Please note that in each cell, we are weighting the magnitude by a 2d gaussian (the code is not provided here). The gaussian weighting is done on a block basis.
+
 
 We make a histogram of the  angles (who are unsigned and varies from 0 to 180 degrees),  into 9 bins. An angle is linearly split into neighboring bins,
 based its proximity to neighboring bin centers. We scale the fraction of the entry of angle into a bin by the corresponding fraction of its magnitude.
@@ -339,3 +328,10 @@ suppressed. A neighborhood window of 20 pixels x 20 pixels is used.
 ### Speed
 
 The current implementation is not gpu accelerated and it takes 5.2 minutes for each input video frame.
+
+### Scale
+
+The current implementation does not tolerate wide variation in scales of cars. Hence it fails to find cars which are far way and very near.
+The implementation has been tailored to detect cars passing though the opposite two lanes in a 4 lane-highway (two lanes each way). Even then we have vehicles coming
+in various sizes, small cars to big min vans. To accommodate a good chunk of vehicles, we used a sliding window of 150 pixels x 75 pixels in a 640 x 360 input frame,
+Each sliding window would be resized to 128 x 64, by <code>cv2.resize</code>
