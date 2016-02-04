@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "Understanding Gaobor Filter"
+title: "Understanding Gabor Filter"
 description: ""
 category:
-tags: []
+tags: [image processing, fourier transform, convolution, signal processing, feature extraction]
 ---
 {% include JB/setup %}
 
