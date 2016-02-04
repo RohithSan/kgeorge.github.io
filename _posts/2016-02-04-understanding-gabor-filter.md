@@ -302,7 +302,6 @@ $$
 
 ###  Derivation of fourier transform of a 1-D gaussian function.
 
-From \eqref{}
 
 How do we find the fourier transform $$H(\omega)$$ of a one dimensional gaussian function $$h(t)$$?
 
