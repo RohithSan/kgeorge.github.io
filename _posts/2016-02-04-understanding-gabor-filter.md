@@ -6,6 +6,9 @@ category:
 tags: [image processing, fourier transform, convolution, signal processing, feature extraction]
 ---
 {% include JB/setup %}
+This is an informal tutorial on the theory and implementation of the gabor filter used for image segmantation.
+
+
 
 ## Objective:
 Formulate  the formulae for gabor filter bank
@@ -22,22 +25,22 @@ h(t) = \frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{t^2}{2\sigma^2}}
 \end{equation}
 $$
 
-For a  general function $$f(t)$$, the fourier transform $$F(w)$$ is given by,
+For a  general function $$p(t)$$, the fourier transform $$P(f)$$ is given by,
 
 
 $$
 \begin{equation} \label{eqv}
-F(\omega) = \int_{-\infty}^{\infty} f(t) e^{-i2\pi\omega t} dt
+P(f) = \int_{-\infty}^{\infty} p(t) e^{-i2\pi f t} dt
 \end{equation}
 $$
 
 
-From \eqref{eqf}, fourier transform $$H(w)$$ of $$h(t)$$ in \eqref{eqa} is,
+From \eqref{eqf}, fourier transform $$H(f)$$ of $$h(t)$$ in \eqref{eqa} is,
 
 $$
 \begin{eqnarray} \label{equ}
-H(\omega) & = &  \frac{1}{\sqrt{2\pi}\sigma} \sqrt{2\pi}\sigma e^{-2\pi^2\omega^2\sigma^2} \\
- & = &   e^{-2\pi^2\omega^2\sigma^2} \\
+H(f) & = &  \frac{1}{\sqrt{2\pi}\sigma} \sqrt{2\pi}\sigma e^{-2\pi^2f^2\sigma^2} \\
+ & = &   e^{-2\pi^2f^2\sigma^2} \\
 \end{eqnarray}
 $$
 
@@ -45,8 +48,8 @@ $$
 ### Introducing one dimensional gabor filter
 
 
-Consider the functions $$g_{e}(t) = h(t) cos(2 \pi \omega_0 t)$$ and $$g_{o}(t) = h(t) sin(2 \pi \omega_0 t)$$, which are gaussian functions modulated
-by a cosine and a sine function respectively.
+Consider the functions $$g_{e}(t) = h(t) cos(2 \pi f_1 t)$$ and $$g_{o}(t) = h(t) sin(2 \pi f_1 t)$$, which are gaussian functions modulated
+by a cosine and a sine function respectively, where $$f_1$$ is a fixed frequency.
 
 
 ![fig-0, 1d gabor functions ]({{ site.url }}/assets/content/gabor_1D_plots.png)
@@ -58,15 +61,15 @@ The one dimensional complex gabor filter is given by
 $$
 \begin{eqnarray} \label{eqq}
 g(t) & = & g_e(t) + i g_o(t) \\
-     & = & h(t) ( cos(2 \pi \omega_0 t) + i sin(2 \pi \omega_0 t))\\
-     & = & h(t) e^{i2\pi\omega_0}
+     & = & h(t) ( cos(2 \pi f_1 t) + i sin(2 \pi f_1 t))\\
+     & = & h(t) e^{i2\pi f_1}
 \end{eqnarray}
 $$
 
 
 
 Please note that the fourier transform of the product of two functions, $$p(t)$$, $$q(t)$$, is the convolution of their respective
-fourier transforms, ie $$P(\omega) * Q(\omega)$$.
+fourier transforms, ie $$P(f) * Q(f)$$.
 
 Let us do a fourier analysis of $$g_{e}(t)$$ and $$g_{o}(t)$$.
 
@@ -74,8 +77,8 @@ Let us do a fourier analysis of $$g_{e}(t)$$ and $$g_{o}(t)$$.
 
 $$
 \begin{eqnarray} \label{eqn}
-G_{e}(\omega) & = & H(\omega) * C(\omega)\\
-G_{o}(\omega) & = & H(\omega) * S(\omega)
+G_{e}(f) & = & H(f) * C(f)\\
+G_{o}(f) & = & H(f) * S(f)
 \end{eqnarray}
 $$
 
@@ -83,24 +86,24 @@ Since $$ p(x) * q(x)  =  \int_{-\infty}^{\infty} p(t) q(x - t) dt $$ and since c
 
 $$
 \begin{eqnarray} \label{eqo}
-G_{e}(\omega) & = & \int_{-\infty}^{\infty} C(u)  H(\omega - u) du \\
- & = &  \frac{1}{2} \int_{-\infty}^{\infty}   H(\omega - u)  (\delta(u + \omega_0) + \delta(u - \omega_0)) du\\
- & = &  \frac{1}{2}  ( H(\omega + \omega_0)   + H(\omega - \omega_0) ) \\
-   & = &  \frac{1}{2}  ( e^{-2\pi^2(\omega + \omega_0)^2\sigma^2}  +  e^{-2\pi^2(\omega - \omega_0)^2\sigma^2}  )
+G_{e}(f) & = & \int_{-\infty}^{\infty} C(u)  H(f - u) du \\
+ & = &  \frac{1}{2} \int_{-\infty}^{\infty}   H(f - u)  (\delta(u + f_1) + \delta(u - f_1)) du\\
+ & = &  \frac{1}{2}  ( H(f + f_1)   + H(f - f_1) ) \\
+   & = &  \frac{1}{2}  ( e^{-2\pi^2(f + f_1)^2\sigma^2}  +  e^{-2\pi^2(f - f_1)^2\sigma^2}  )
 \end{eqnarray}
 $$
 
 
-So by \eqref{eqq}, the real part of the  fourier transform of $$g_e(t)$$ is the sum of two gaussian functions separated by $$\pm \omega_0$$, and the imaginary part
-is the difference of two gaussian finctions separeted by $$\pm \omega_{0} $$.
+So by \eqref{eqq}, the real part of the  fourier transform of $$g_e(t)$$ is the sum of two gaussian functions separated by $$\pm f_1 $$, and the imaginary part
+is the difference of two gaussian finctions separeted by $$\pm f1 $$.
 
 Similarly,
 $$
 \begin{eqnarray} \label{eqp}
-G_{o}(\omega) & = & \int_{-\infty}^{\infty} S(u)  H(\omega - u) du \\
- & = &  \frac{i}{2} \int_{-\infty}^{\infty}   H(\omega - u)  (\delta(u + \omega_0) - \delta(u - \omega_0)) du\\
- & = &  \frac{i}{2}  ( H(\omega + \omega_0)   - H(\omega - \omega_0) ) \\
-   & = &  \frac{i}{2}  ( e^{-2\pi^2(\omega + \omega_0)^2\sigma^2}  -  e^{-2\pi^2(\omega - \omega_0)^2\sigma^2}  )
+G_{o}(f) & = & \int_{-\infty}^{\infty} S(u)  H(f - u) du \\
+ & = &  \frac{i}{2} \int_{-\infty}^{\infty}   H(f - u)  (\delta(u + f_1) - \delta(u - f_1)) du\\
+ & = &  \frac{i}{2}  ( H(f + f_1)   - H(f - f_1) ) \\
+   & = &  \frac{i}{2}  ( e^{-2\pi^2(f + f_1)^2\sigma^2}  -  e^{-2\pi^2(f - f_1)^2\sigma^2}  )
 \end{eqnarray}
 $$
 
@@ -108,9 +111,9 @@ $$
 Similarly,
 $$
 \begin{eqnarray} \label{eqp2}
-G(\omega) & = & G_e{\omega} + i G_o{\omega} \\
- & = & \frac{1}{2}  ( H(\omega + \omega_0)   + H(\omega - \omega_0) ) - \frac{1}{2}  ( H(\omega + \omega_0)   - H(\omega - \omega_0) )\\
- & = & H(\omega - \omega_0)
+G(f) & = & G_e(f) + i G_o(f) \\
+ & = & \frac{1}{2}  ( H(f + f_1)   + H(f - f_1) ) - \frac{1}{2}  ( H(f + f_1)   - H(f - f_1) )\\
+ & = & H(f - f_1)
 \end{eqnarray}
 $$
 
@@ -171,7 +174,7 @@ pkg load image
 sigma_x = 0.5;
 sigma_y = 0.5;
 
-omega = 1.0;
+freq = 1.0;
 
 %kernel size = 7 x 7
 N=7;
@@ -186,7 +189,7 @@ I =  I .* (1.0/(2.0 * pi * sigma_x * sigma_y));
 
 
 %plot of a 2D cosine wave
-J = cos((xx + yy) .* (2 * pi * omega) );
+J = cos((xx + yy) .* (2 * pi * freq) );
 
 colormap(copper)
 s1 = subplot(2,1,2);
@@ -210,10 +213,20 @@ title(s2, sprintf("perspective view, rotated for convenience"));
 
 
 ha = axes('Position',[0 0 1 1],'Xlim',[0 1],'Ylim',[0 1],'Box','off','Visible','off','Units','normalized', 'clipping' , 'off');
-text(0.5, 0.05, sprintf("2d gaussian times cos function,  \\sigma_x=%.1f,\\sigma_y=%.1f, \\omega=%.1f", sigma_x, sigma_y, omega),'HorizontalAlignment','center','VerticalAlignment', 'top');
+text(0.5, 0.05, sprintf("fig 5, 2d gaussian times cos function,  \\sigma_x=%.1f,\\sigma_y=%.1f, u_1=%.1f, v_1=%.1f", sigma_x, sigma_y, freq, freq),'HorizontalAlignment','center','VerticalAlignment', 'top');
 %save using a uility function
 %saveInGithubBlog("gabor_2D_gssn_times_cos");
+
+
 </pre>
+
+Please see \eqref{eqs4} for a derivation of the fourier transform of a gabor function as stated in \eqref{eqs2}.
+Shown below the image of the absolute value of the fourier transform for a gabor 2D function with $$\sigma_x = 0.25, \sigma_y =0.125, u_1 = 2 $$ and   $$ v_1 = 4 $$.
+Note that it is a axially aligned elliptical gaussian whose origin is shifted to $$(u_1, v_1) =(2, 4)$$. Please disregard the axis lines drawn.
+If you look carefully, in the picture there is a black dot appearing exactly at the centre of the guassian. The black dot represents the frequency $$(2, 4) $$ and was purposefully
+ added to the image of the fft, just to verify the correctness of the shift.
+![fig-1, 2D  gaussian times cosine wave]({{ site.url }}/assets/content/gabor_2D_fft_of_gabor_complex.png)
+
 
 There are a number of varying parameters in the above formulae for a gabor filter kernel ie $$ \sigma_x, \sigma_y, u_1$$ and $$v_1 $$. We can add a few more
 parameters to make it a bit more general and useful to us so that we can use a proper specialization of this kernel for
@@ -260,7 +273,7 @@ of $$\alpha$$ yields the following figure.
 In fact, given above is how the cosine function would look when the axes are rotated by the transform given by \eqref{eqt} for various values
 of $$\alpha$$.
 
-
+gabor_2D_fft_of_gabor_complex_with_rotated_axis_1.png
 
 Another parameter that need be introduced is the amount by which the cosine pattern should shift. Let us modify the cosine funstion as
  $$cos(2\pi(u_1 x' + v_1 y') + \phi)$$
@@ -282,6 +295,12 @@ g(x, y) & = & g_e(x, y) + i g_o(x, y) \\
 \end{eqnarray}
 $$
 
+\eqref{eqs6} gives the fourier transform of such a gabor function described in \eqref{eqw}.
+Shown below is the absolute value of the fourier transform of such an example gabor function, with $$ \sigma_x = 0.25, \sigma_y =0.125, u_1 =2, u_2 =4 $$ and $$\alpha = \frac{\pi}{2} $$.
+Note that the spectrum is still an axially aligned ellipse and is shifted to $$u_1 = 2, v_1 = 4$$. Please disregard the axis lines drawn.
+Also, we have added a black dot to the transform image at the frequency $$(2, 4)$$, to signify and verify the correctness of the shift.
+![fig-6,2D cosine function with varying phase]({{ site.url }}/assets/content/gabor_2D_fft_of_gabor_complex_with_rotated_axis_1.png)
+
 There is another school of thought, where by the $$x'$$ and $$y'$$ is used in the gaussian function part as well, instead of $$x$$, and
 $$y$$, giving the gaussian the same orientation as the cosine waves according to which the formulae becomes,
 
@@ -296,6 +315,8 @@ g(x, y) & = & g_e(x, y) + i g_o(x, y) \\
  & = & \frac{1}{2\pi\sigma_{x}\sigma_{y}} e ^{-\frac{1}{2}(\frac{x'^2}{\sigma_{x}^{2}} + \frac{y'^2}{\sigma_{y}^{2}})} e^{i(2\pi( u_1 x' + v_1 y') + \phi)}
 \end{eqnarray}
 $$
+The fft of the gabor function according to the above equation \eqref{eqx} will boil down to an ellipse translated by $$(u_1, v_1)$$ but rotated by $$\alpha$$.
+![fig-6,2D cosine function with varying phase]({{ site.url }}/assets/content/gabor_2D_fft_of_gabor_complex_with_rotated_axis_2.png)
 
 
 ## Appendix
@@ -303,34 +324,34 @@ $$
 ###  Derivation of fourier transform of a 1-D gaussian function.
 
 
-How do we find the fourier transform $$H(\omega)$$ of a one dimensional gaussian function $$h(t)$$?
+How do we find the fourier transform $$H(f)$$ of a one dimensional gaussian function $$h(t)$$?
 
-For a  general function $$f(t)$$, the fourier transform $$F(w)$$ is given by \eqref{eqv}.
+For a  general function $$p(t)$$, the fourier transform $$P(f)$$ is given by \eqref{eqv}.
 
 
-On a simpler note, let us work on a simple function $$h(t) = e^{-at^2}$$ and try to find its fourier transform $$H(\omega)$$.
+On a simpler note, let us work on a simple function $$h(t) = e^{-at^2}$$ and try to find its fourier transform $$H(f)$$.
 
 
 $$
 \begin{eqnarray} \label{eqc}
 
-H(\omega) & = & \int_{-\infty}^{\infty} h(t) e^{-i2\pi\omega t} dt \\
-         & = & \int_{-\infty}^{\infty} e^{-at^2} e^{-i2\pi\omega t} dt \\
-         & = & \int_{-\infty}^{\infty} e^{-at^2} (cos(2\pi\omega t) - i. sin(2\pi\omega t)) dt \\
-         & = & \int_{-\infty}^{\infty} e^{-at^2} cos(2\pi\omega t) - i. \int_{-\infty}^{\infty}  e^{-at^2} sin(2\pi\omega t) dt
+H(f) & = & \int_{-\infty}^{\infty} h(t) e^{-i2\pi f t} dt \\
+         & = & \int_{-\infty}^{\infty} e^{-at^2} e^{-i2\pi f t} dt \\
+         & = & \int_{-\infty}^{\infty} e^{-at^2} (cos(2\pi f t) - i. sin(2\pi f t)) dt \\
+         & = & \int_{-\infty}^{\infty} e^{-at^2} cos(2\pi f t) - i. \int_{-\infty}^{\infty}  e^{-at^2} sin(2\pi f t) dt
 \end{eqnarray}
 $$
 
 Please remember that for an odd function $$o(t)$$,  $$\int_{-\infty}^{0} o(t) =  -\int_{0}^{\infty} o(t)$$ and so $$\int_{-\infty}^{\infty} o(t) = 0 $$.
 
-Since  $$e^{-at^2}$$ is an even function and $$sin(2\pi\omega t)$$ is an odd function, $$ \int_{-\infty}^{\infty}  e^{-at^2} sin(2\pi\omega t) = 0$$.
+Since  $$e^{-at^2}$$ is an even function and $$sin(2\pi f t)$$ is an odd function, $$ \int_{-\infty}^{\infty}  e^{-at^2} sin(2\pi f t) = 0$$.
 
 So the above equation simplifies to
 
 $$
 \begin{eqnarray} \label{eqd}
-H(\omega) & = &  \int_{-\infty}^{\infty} e^{-at^2} cos(2\pi\omega t) \space dt\\
-& = &  2 \int_{0}^{\infty} e^{-at^2} cos(2\pi\omega t) \space dt
+H(f) & = &  \int_{-\infty}^{\infty} e^{-at^2} cos(2\pi f t) \space dt\\
+& = &  2 \int_{0}^{\infty} e^{-at^2} cos(2\pi f t) \space dt
 \end{eqnarray}
 $$
 
@@ -341,7 +362,7 @@ the above equation translates to,
 
 $$
 \begin{eqnarray} \label{eqe}
-H(\omega) & = &  \sqrt{\frac{\pi}{a}} e^{-\frac{\pi^2\omega^2}{a}}
+H(f) & = &  \sqrt{\frac{\pi}{a}} e^{-\frac{\pi^2 f^2}{a}}
 \end{eqnarray}
 $$
 
@@ -349,8 +370,8 @@ Putting $$a = \frac{1}{2\sigma^2}$$, in \eqref{eqe}, fourier transform $$H(w)$$ 
 
 $$
 \begin{eqnarray} \label{eqf}
-H(\omega) & = &  \frac{1}{\sqrt{2\pi}\sigma} \sqrt{2\pi}\sigma e^{-2\pi^2\omega^2\sigma^2} \\
- & = &   e^{-2\pi^2\omega^2\sigma^2} \\
+H(f) & = &  \frac{1}{\sqrt{2\pi}\sigma} \sqrt{2\pi}\sigma e^{-2\pi^2 f^2\sigma^2} \\
+ & = &   e^{-2\pi^2 f^2\sigma^2} \\
 \end{eqnarray}
 $$
 
@@ -403,20 +424,20 @@ $$
 ### Derivation of fourier transform of sine and cosine functions
 
 
-Consider a simple cosine and a sine function, $$c(t)$$ and $$s(t)$$ respectively, what would be their fourier transforms $$C(w)$$ and $$S(w)$$?
+Consider a simple cosine and a sine function, $$c(t)$$ and $$s(t)$$ respectively, what would be their fourier transforms $$C(f)$$ and $$S(f)$$?
 
 
 $$
 \begin{eqnarray} \label{eqh}
-c(t) & = & cos(2\pi \omega_{0}t) \\
- & = & \frac{1}{2} ( e^{-i2\pi\omega_{0} t} + e^{i2\pi\omega_{0} t} )
+c(t) & = & cos(2\pi f_1 t) \\
+ & = & \frac{1}{2} ( e^{-i2\pi f_1 t} + e^{i2\pi f_1 t} )
 \end{eqnarray}
 $$
 
 $$
 \begin{eqnarray} \label{eqg}
-s(t) & = & sin(2\pi \omega_{0}t) \\
-& = & \frac{i}{2} ( e^{-i2\pi\omega_{0} t} - e^{i2\pi\omega_{0} t} )
+s(t) & = & sin(2\pi f_1 t) \\
+& = & \frac{i}{2} ( e^{-i2\pi f_1 t} - e^{i2\pi f_1 t} )
 \end{eqnarray}
 $$
 
@@ -426,30 +447,30 @@ From \eqref{eqh},
 
 $$
 \begin{eqnarray} \label{eqi}
-C(\omega) & = & \int_{-\infty}^{\infty} c(t) e^{-i2\pi\omega t} dt \\
-& = & \int_{-\infty}^{\infty} \frac{1}{2} ( e^{-i2\pi\omega_{0} t} + e^{i2\pi\omega_{0} t} ) e^{-i2\pi\omega t} dt \\
-& = & \int_{-\infty}^{\infty} \frac{1}{2} ( e^{-i2\pi(\omega + \omega_{0}) t} + e^{-i2\pi (\omega - \omega_{0}) t} ) dt \\
+C(f) & = & \int_{-\infty}^{\infty} c(t) e^{-i2\pi f t} dt \\
+& = & \int_{-\infty}^{\infty} \frac{1}{2} ( e^{-i2\pi f_1 t} + e^{i2\pi f_1 t} ) e^{-i2\pi f t} dt \\
+& = & \int_{-\infty}^{\infty} \frac{1}{2} ( e^{-i2\pi(f + f_1) t} + e^{-i2\pi (f - f_1) t} ) dt \\
 \end{eqnarray}
 $$
 
-Consider the integral $$ \int_{-\infty}^{\infty}  e^{-i2\pi \omega t} dt $$, That is the fourier transform $$I(\omega)$$ of the identity function $$i(t)=1$$.
+Consider the integral $$ \int_{-\infty}^{\infty}  e^{-i2\pi f t} dt $$, That is the fourier transform $$I(f)$$ of the identity function $$i(t)=1$$.
 
 
 
 
-The fourier inversion theorem states the following, if $$ F(\omega) = \int_{-\infty}^{\infty}  e^{-i2\pi \omega t} f(t) \space dt$$, then
- $$ \int_{-\infty}^{\infty}  e^{i2\pi \omega x} F(\omega) d\omega = f(x) $$. For a  proof, please
+The fourier inversion theorem states the following, if $$ P(f) = \int_{-\infty}^{\infty}  e^{-i2\pi f t} p(t) \space dt$$, then
+ $$ \int_{-\infty}^{\infty}  e^{i2\pi f x} P(f) df = p(x) $$. For a  proof, please
 see [[2], Proof of Fourier inversion theorem](#references)
 
 
 
-Now considering, the dirac delta function $$\delta(t)$$ with the property $$ \int_{-\infty}^{\infty} \delta(t-a) f(t) = f(a)$$, the integral below,
+Now considering, the dirac delta function $$\delta(t)$$ with the property $$ \int_{-\infty}^{\infty} \delta(t-a) p(t) = p(a)$$, the integral below,
 evaluates to $$1$$ or the identity function $$i(x)$$.
 
 
 $$
 \begin{eqnarray} \label{eqj}
-\int_{-\infty}^{\infty}  e^{i2\pi \omega x} \delta(\omega) d\omega & = &  1 \\
+\int_{-\infty}^{\infty}  e^{i2\pi f x} \delta(f) df & = &  1 \\
  & = &  i(x)
 \end{eqnarray}
 $$
@@ -458,7 +479,7 @@ Applying the fourier inversion theorem, \eqref{eqj} translates to
 
 $$
 \begin{eqnarray} \label{eqk}
-\int_{-\infty}^{\infty}  e^{-i2\pi \omega x} i(x) dx & = &  \delta(\omega)
+\int_{-\infty}^{\infty}  e^{-i2\pi f x} i(x) dx & = &  \delta(f)
 \end{eqnarray}
 $$
 
@@ -468,17 +489,17 @@ So \eqref{eqi} can be continued as,
 
 $$
 \begin{eqnarray} \label{eql}
-C(\omega) & = & \int_{-\infty}^{\infty} \frac{1}{2} ( e^{-i2\pi(\omega + \omega_{0}) t} + e^{-i2\pi (\omega - \omega_{0}) t} ) dt \\
-& = &  \frac{1}{2} (\delta(\omega + \omega_0) + \delta(\omega - \omega_0)) \\
+C(f) & = & \int_{-\infty}^{\infty} \frac{1}{2} ( e^{-i2\pi(f + f_1) t} + e^{-i2\pi (f - f_1) t} ) dt \\
+& = &  \frac{1}{2} (\delta(f + f_1) + \delta(f - f_1)) \\
 
 \end{eqnarray}
 $$
 
-Similarly, from \eqref{eqg}, fourier transform $$S(\omega)$$of sine function $$s(t) = sin(2\pi\omega_0 t)$$ is given by,
+Similarly, from \eqref{eqg}, fourier transform $$S(f)$$of sine function $$s(t) = sin(2\pi f_1 t)$$ is given by,
 
 $$
 \begin{eqnarray} \label{eqm}
-S(\omega) & = & \frac{i}{2} (\delta(\omega + \omega_0) - \delta(\omega - \omega_0))
+S(f) & = & \frac{i}{2} (\delta(f + f_1) - \delta(f - f_1))
 \end{eqnarray}
 $$
 
@@ -510,13 +531,13 @@ G(u, v) & = & G_1(u) \space G_2(v) \\
 $$
 
 The same principles can be extended to the generalized gabor filter function we formulated in \eqref{eqw}, by replacing
-$$u'_1 = u_1 cos(\alpha) - v_1 sin(\alpha) $$ and $$v'_1 = u_1 sin(\alpha) + v_1 cos(\alpha) $$.
+$$u'_1 = u_1 cos(\alpha) + v_1 sin(\alpha) $$ and $$v'_1 = -u_1 sin(\alpha) + v_1 cos(\alpha) $$.
 
 $$
 \begin{eqnarray} \label{eqs5}
 g(x, y) & = & \frac{1}{2\pi\sigma_{x}\sigma_{y}} e ^{-\frac{1}{2}(\frac{x^2}{\sigma_{x}^{2}} + \frac{y^2}{\sigma_{y}^{2}})} e^{i(2\pi(u_1 x' + v_1 y') + \phi)}\\
-e^{i(2\pi(u_1 x' + v_1 y') + \phi)}& = &  e^{i(2\pi(u_1 ( x cos(\alpha) + y sin(\alpha)) + v_1 ( -x sin(\alpha) + y cos(\alpha)) ) + \phi)}\\
-& = &  e^{i(2\pi(x (u_1 cos(\alpha) - v_1 sin(\alpha))))} e^{i(2\pi(y (u_1 sin(\alpha) + v_1 cos(\alpha))))}\\
+e^{i(2\pi(u_1 x' + v_1 y') + \phi)}& = &  e^{i(2\pi(u_1 ( x cos(\alpha) - y sin(\alpha)) + v_1 ( x sin(\alpha) + y cos(\alpha)) ) + \phi)}\\
+& = &  e^{i(2\pi(x (u_1 cos(\alpha) + v_1 sin(\alpha))))} e^{i(2\pi(y (-u_1 sin(\alpha) + v_1 cos(\alpha))))}\\
 & = &  e^{i 2\pi x u'_1 }  e^{i 2\pi y v'_1 }\\
 g(x, y) & = &  \frac{1}{\sqrt{2\pi}\sigma_{x}} e ^{- \frac{x^2}{2\sigma_{x}^{2}}}  e^{i 2\pi x u'_1 } \space \frac{1}{\sqrt{2\pi}\sigma_{y}}  e ^{- \frac{y^2}{2\sigma_{y}^{2}}} e^{i 2\pi y v'_1 } \space e^{i\phi}
 \end{eqnarray}
@@ -531,6 +552,23 @@ G(u, v) & = &  H(u - u'_1) H(v - v'_1) \space e^{i\phi}
 \end{eqnarray}
 $$
 
+Now we need to consider the fourier transform of the gabor function $$G(x,y)$$ defined by \eqref{eqx} as well.
+
+
+$$
+\begin{eqnarray} \label{eqs7}
+x' & = & x cos(\alpha) - y sin(\alpha) \\
+y' & = & x sin(\alpha) + y cos(\alpha) \\
+g(x, y) & = &  \frac{1}{\sqrt{2\pi}\sigma_{x}} e ^{- \frac{x'^2}{2\sigma_{x}^{2}}}  e^{i 2\pi x' u_1 } \space \frac{1}{\sqrt{2\pi}\sigma_{y}}  e ^{- \frac{y'^2}{2\sigma_{y}^{2}}} e^{i 2\pi y' v_1 } \space e^{i\phi}
+\end{eqnarray}
+$$
+
+The fourier transform of the above function would be the same, but rotated by an angle $$\alpha$$.
+$$
+\begin{eqnarray} \label{eqs8}
+G(u, v) & = &  H(u - u'_1) H(v - v'_1) \space e^{i\phi}
+\end{eqnarray}
+$$
 
 ## References
 
