@@ -123,14 +123,14 @@ $$
 
 ![fig-1, 2D gaussian]({{ site.url }}/assets/content/gabor_2D_gssn.png)
 
-In fig-1,  we have plotted the function $$h(x,y) = \frac{1}{2\pi\sigma_{x}\sigma_{y}} e ^{-\frac{1}{2}(\frac{x^2}{\sigma_{x}^{2}} + \frac{y^2}{\sigma_{y}^{2}})} $$ and
+In fig-3,  we have plotted the function $$h(x,y) = \frac{1}{2\pi\sigma_{x}\sigma_{y}} e ^{-\frac{1}{2}(\frac{x^2}{\sigma_{x}^{2}} + \frac{y^2}{\sigma_{y}^{2}})} $$ and
 
 
 
 ![fig-1, 2D cosine wave]({{ site.url }}/assets/content/gabor_2D_cos.png)
 
 
-A general 2D cosine function is given by  $$ c(x,y) = cos(2\pi (u_1 x + v_1 y)) $$, where $$u_1, v_1 $$ are fixed spatial frequencies. This is shown in fig-2.
+A general 2D cosine function is given by  $$ c(x,y) = cos(2\pi (u_1 x + v_1 y)) $$, where $$u_1, v_1 $$ are fixed spatial frequencies. This is shown in fig-4.
 
 
 
@@ -150,14 +150,14 @@ $$
 
 ![fig-1, 2D  gaussian times cosine wave]({{ site.url }}/assets/content/gabor_2D_gssn_times_cos.png)
 
-In fig-3,  we have plotted the function $$ g_e(x,y) = h(x, y). c(x, y) $$.
+In fig-5,  we have plotted the function $$ g_e(x,y) = h(x, y). c(x, y) $$.
 
- Note that in figure 2, and fig 3, the  3d perspective views
+ Note that in fig-3, fig-4 and fig-5, the  3d perspective views
 are slightly rotated to accentuate their features for viewing decipherability.
 
 
 
-Here is the octave code used for generating fig-2.
+Here is the octave code used for generating fig-5.
 
 
 <pre>
@@ -235,7 +235,7 @@ a proper image segmentation problem. So let us play around with these parameters
 Since we are just studying the effects of these parameters, let us continue to focus on the real part $$g_e(x,y)$$ of this filter.
 
 ![fig-3, real part of 2D gabor function with varying sigma-s]({{ site.url }}/assets/content/gabor_2D_real_part_with_varying_sigmas.png)
-In fig-3, we have plotted the real part of the gabor 2D filter with varying values of $$\sigma_x$$ and $$\sigma_y$$. Note that,
+In fig-7, we have plotted the real part of the gabor 2D filter with varying values of $$\sigma_x$$ and $$\sigma_y$$. Note that,
 as the $$\sigma$$-values vary, the eccentricities of the gaussian ellipse, changes, but nevertheless remains axially aligned.
 
 Let us now try varying  $$u_1 $$ and $$v_1$$. To illustrate this, just for the purpose of clarity, we are going to plot
@@ -245,7 +245,7 @@ is self explanatory. Though we could indepentally vary $$u_1$$ and $$v_1$$, for 
 
 ![fig-4,2D cosine function with varying u-v-s]({{ site.url }}/assets/content/gabor_2D_cos_with_varying_omegas.png)
 
-You can see from fig 4, the changes in the frequency of the cosine wave.
+You can see from fig-8, the changes in the frequency of the cosine wave.
 
 After playing around with these parameters, one feature that is evidently missing is the ability to change the angle at which
 the cosine pattern forms w.r.t the x-axis. In fact we need to change this angle irrespective of the spatial frequency parameters $$u_1$$ and $$v_1$$.
@@ -273,7 +273,6 @@ of $$\alpha$$ yields the following figure.
 In fact, given above is how the cosine function would look when the axes are rotated by the transform given by \eqref{eqt} for various values
 of $$\alpha$$.
 
-gabor_2D_fft_of_gabor_complex_with_rotated_axis_1.png
 
 Another parameter that need be introduced is the amount by which the cosine pattern should shift. Let us modify the cosine funstion as
  $$cos(2\pi(u_1 x' + v_1 y') + \phi)$$
