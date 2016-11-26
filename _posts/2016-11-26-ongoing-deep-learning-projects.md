@@ -7,6 +7,7 @@ tags: []
 ---
 {% include JB/setup %}
 ![image-classification using pretrained vgg16]({{ site.url }}/assets/content/dpl_imggrid_demo.png)
+
 We have a few deeplearning projects encapsulated in jupyter ipython notebooks in the the notebooks directory of this [github repository](https://github.com/kgeorge/kgeorge_dpl)
 The code written is mainly by us, But we have shown credit where ever we have used code from other repositories.
 We have used tensorflow and jupyter ipython notebooks with ipywidgets installed

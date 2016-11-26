@@ -7,6 +7,7 @@ tags: [image processing, fourier transform, convolution, signal processing, feat
 ---
 {% include JB/setup %}
 ![fig-1, 2D  gaussian times cosine wave]({{ site.url }}/assets/content/gabor_2D_gssn_times_cos.png)
+
 This is an informal tutorial on the intuitive  theory behind  [gabor filters](https://en.wikipedia.org/wiki/Gabor_filter)  used for image segmantation.
 
 
